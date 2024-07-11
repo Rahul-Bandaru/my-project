@@ -25,6 +25,9 @@ jobs:
       with:
         cmake-version: '3.18.4'
 
+    - name: Set up Profile
+      run: conan profile detect --force
+
     - name: Install Dependencies
       run: conan install . --output-folder=build --build=missing
 
