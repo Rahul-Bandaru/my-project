@@ -38,7 +38,12 @@ jobs:
            cd build
            cmake --build .
 
-    - name: Run tests
+  run:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Run Executable
       run: |
            cd build
            ./compressor
