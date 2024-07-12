@@ -28,12 +28,6 @@ jobs:
     - name: Set up Profile
       run: conan profile detect --force
 
-
-  run:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
     - name: Install Dependencies
       run: conan install . --output-folder=build --build=missing
 
@@ -46,6 +40,21 @@ jobs:
       run: |
            cd build
            cmake --build .
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-file
+        path: build
+
+
+  run:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v4
+
     - name: Run Executable
       run: |
            cd build
