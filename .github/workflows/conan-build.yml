@@ -58,4 +58,5 @@ jobs:
     - name: Run Executable
       run: |
            cd build-file
+           chmod +x compressor
            ./compressor
