@@ -57,5 +57,5 @@ jobs:
 
     - name: Run Executable
       run: |
-           cd build
+           cd build-file
            ./compressor
