@@ -28,6 +28,12 @@ jobs:
     - name: Set up Profile
       run: conan profile detect --force
 
+
+  run:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Install Dependencies
       run: conan install . --output-folder=build --build=missing
 
@@ -40,12 +46,6 @@ jobs:
       run: |
            cd build
            cmake --build .
-
-  run:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
     - name: Run Executable
       run: |
            cd build
