@@ -1,0 +1,40 @@
+# This workflow runs a verification pipeline when a specific type of comment is added to a pull request.
+# Usage: Comment "/verification/<module_name>/<pipeline_name>" on a PR to trigger the verification pipeline.
+# Example comment: "/verification/small_variant_caller/evaluate_f1"
+
+name: "Run Verification Pipeline"
+
+# https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  Deploy:
+    name: Deploy and Run Verification
+    runs-on: ubuntu-latest
+    # Only run if it#s a PR and the comment contains /verification
+    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/verification') }}
+    steps:
+      # Issue_comment event runs on the default branch of the repository, and not on the branch of the pull request.
+      # We will use the GitHub Action xt0rted/pull-request-comment-branch@v1 to determine the correct branch.
+      - name: Get PR branch
+        uses: xt0rted/pull-request-comment-branch@v1
+        id: comment-branch
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Extract Module Name
+        env:
+          comment_body: ${{ github.event.comment.body }}
+        run: |
+          module_name=$(echo "$comment_body" | cut -d'/' -f3)
+          echo "Module Name: $module_name"
+          echo "module_name=$module_name" >> $GITHUB_ENV
+      - name: Extract Verification Pipeline Name
+        env:
+          comment_body: ${{ github.event.comment.body }}
+        run: |
+          verification_pipeline=$(echo "$comment_body" | cut -d'/' -f4)
+          echo "Verification Pipeline: $verification_pipeline"
+          echo "verification_pipeline=$verification_pipeline" >> $GITHUB_ENV
