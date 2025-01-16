@@ -24,17 +24,5 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-      - name: Extract Module Name
-        env:
-          comment_body: ${{ github.event.comment.body }}
-        run: |
-          module_name=$(echo "$comment_body" | cut -d'/' -f3)
-          echo "Module Name: $module_name"
-          echo "module_name=$module_name" >> $GITHUB_ENV
-      - name: Extract Verification Pipeline Name
-        env:
-          comment_body: ${{ github.event.comment.body }}
-        run: |
-          verification_pipeline=$(echo "$comment_body" | cut -d'/' -f4)
-          echo "Verification Pipeline: $verification_pipeline"
-          echo "verification_pipeline=$verification_pipeline" >> $GITHUB_ENV
+      - name: debug
+        run: ls
