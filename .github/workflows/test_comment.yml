@@ -14,7 +14,7 @@ jobs:
     name: Deploy and Run Verification
     runs-on: ubuntu-latest
     # Only run if it#s a PR and the comment contains /verification
-    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/verification') }}
+    if: ${{ github.event.issue.pull_request }}
     steps:
       # Issue_comment event runs on the default branch of the repository, and not on the branch of the pull request.
       # We will use the GitHub Action xt0rted/pull-request-comment-branch@v1 to determine the correct branch.
